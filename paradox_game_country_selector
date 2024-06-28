@@ -1,6 +1,5 @@
 import random
-#This is a list of the people this list is for
-
+#This is a user inputted list of names. The "main" function at the bottom of this defines how many names get put in.
 def get_player_names(num_players):
     user_ids = []
     for i in range(1, num_players + 1):
@@ -9,16 +8,21 @@ def get_player_names(num_players):
     return user_ids
 
 def assign_countries(players): 
+    #This is a list of nations to pull from. Any input outside of this list is invalidated and needs repeating.
     countries = [ 
         "great britain", "france", "spain", "netherlands", "belgium", "prussia",
         "austria", "sweden", "russia","portugal","italy","ottomans","persia",
         "egypt", "japan", "dutch east indies", "usa", "mexico", "peru/bolivia",
         "oranje/transvaal", "argentina", "canada", "south africa", "australia"
         ]
+    #Once the players pick their countries, they are transferred from the array above and into the array below. This let's me compile a list of taken nations, preventing double assignment.
     selected_countries = []
-    
+    #This randomizes the player order after submitting the names. This makes it so that no one knows who gets called next.
+    random.shuffle(players)
+
     for player in players:
         while True:
+            #If player says they care, they pick from a weighted list they make.
             randomornot = input(f"{player}, Do you care what country you play as (randomize pick after everyone else has chosen)? ")
             if randomornot == "yes":
                 print(f"{player}, you will now pick 4 countries in priority. It is a weighted list. Here are the available countries:\n")
@@ -27,23 +31,26 @@ def assign_countries(players):
                 countrypick2 = input("What country is your second choice? ")
                 countrypick3 = input("What country is your third choice? ")
                 countrypick4 = input("What country is your fourth choice? ")
+                #This section can be modified to increase or decrease odds of being picked.
                 weighted_countries = [
-                    countrypick1, countrypick1, countrypick1,countrypick1,countrypick1, 
+                    countrypick1, countrypick1, countrypick1, countrypick1, countrypick1, 
                     countrypick2, countrypick2, countrypick2,
                     countrypick3, countrypick3,
                     countrypick4
                 ]
+            #This is the weighted countries randomized selection. Also edits the list of available nations.
                 picked = random.choice(weighted_countries)
                 if picked in countries:
-                    print(f"Congrats, {player}, you are now {picked.capitalize()}")
+                    print(f"Congrats, {player}, you are now {picked}")
                     selected_countries.append((player, picked))
                     countries.remove(picked)
                     break
                 else:
                     print("Invalid. Please choose from the list.")
+            #This is where the randomized selection for those who don't care goes
             elif randomornot == "no":
                 picked = random.choice(countries)
-                print(f"Congrats, {player}, you are now {picked.capitalize()}")
+                print(f"Congrats, {player}, you are now {picked}")
                 selected_countries.append((player, picked))
                 countries.remove(picked)
                 break
@@ -52,7 +59,7 @@ def assign_countries(players):
 
     print("\nCountries assigned:")
     for player, country in selected_countries:
-        print(f"{player} - {country.capitalize()}")
+        print(f"{player} - {country}")
 
 if __name__ == "__main__":
     num_players = int(input("How many people will be playing in this game? "))
